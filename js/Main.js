@@ -321,3 +321,33 @@
 
     console.log("Navgurukul Campus Quiz Arena JavaScript loaded.");
 })();
+
+// Login Modal
+// ================= LOGIN MODAL =================
+
+// Get Login elements
+
+// LOGIN MODAL
+
+const loginTab = document.getElementById("loginTab");
+const loginModal = document.getElementById("loginModal");
+
+if (loginTab && loginModal) {
+
+    loginTab.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        loginModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    });
+
+    window.addEventListener("message", function(event) {
+        if (event.data === "closeLoginModal") {
+            loginModal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+    });
+
+} else {
+    console.error("Login button or modal not found!");
+}
