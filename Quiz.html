@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Take a Quiz | Navgurukul Campus Quiz Arena</title>
+
+    <link rel="stylesheet" href="Quiz.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main class="quiz-page">
+        <header class="quiz-header">
+            <a class="brand" href="Home.html" aria-label="Back to dashboard">
+                <span class="brand-mark" aria-hidden="true">✦</span>
+                <span>Navgurukul</span>
+            </a>
+
+            <a class="back-link" href="Home.html">← Back to dashboard</a>
+        </header>
+
+        <section class="quiz-container" aria-labelledby="quiz-title">
+            <div class="quiz-heading">
+                <div>
+                    <p class="eyebrow">CAMPUS QUIZ ARENA</p>
+                    <h1 id="quiz-title">Your Quiz</h1>
+                    <p class="quiz-subtitle">Read each question carefully and choose your answer.</p>
+                </div>
+
+                <div class="timer-card" aria-live="polite">
+                    <span class="timer-label">TIME LEFT</span>
+                    <strong id="quiz-timer">15:00</strong>
+                </div>
+            </div>
+
+            <div class="quiz-meta">
+                <div class="subject-details">
+                    <span class="meta-label">SCHOOL</span>
+                    <strong id="quiz-school">Not selected</strong>
+                </div>
+                <div class="subject-details">
+                    <span class="meta-label">SUBJECT</span>
+                    <strong id="quiz-subject">Not selected</strong>
+                </div>
+                <div class="subject-details">
+                    <span class="meta-label">DIFFICULTY</span>
+                    <strong id="quiz-difficulty">Medium</strong>
+                </div>
+            </div>
+
+            <div class="question-progress">
+                <div class="progress-copy">
+                    <span id="question-counter">Question 1 of 10</span>
+                    <span id="answered-counter">0 answered</span>
+                </div>
+                <div
+                    class="progress-track"
+                    role="progressbar"
+                    aria-label="Quiz progress"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                    id="quiz-progress"
+                >
+                    <div class="progress-fill" id="quiz-progress-fill"></div>
+                </div>
+            </div>
+
+            <section class="question-card" aria-labelledby="question-text">
+                <div class="question-card-top">
+                    <span class="question-tag">QUESTION</span>
+                    <span class="question-points">1 point</span>
+                </div>
+
+                <h2 id="question-text">Your question will appear here.</h2>
+
+                <form id="answer-form">
+                    <fieldset class="answer-options" id="answer-options">
+                        <legend class="visually-hidden">Choose one answer</legend>
+
+                        <!-- quiz.js will insert the answer options here. -->
+                        <p class="loading-message" id="question-placeholder">
+                            Loading your question...
+                        </p>
+                    </fieldset>
+                </form>
+
+                <p class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite"></p>
+            </section>
+
+            <nav class="quiz-navigation" aria-label="Quiz question navigation">
+                <button class="secondary-button" type="button" id="previous-button" disabled>
+                    ← Previous
+                </button>
+
+                <div class="navigation-right">
+                    <button class="primary-button" type="button" id="next-button">
+                        Next question →
+                    </button>
+                    <button class="submit-button" type="button" id="submit-button">
+                        Submit quiz
+                    </button>
+                </div>
+            </nav>
+
+            <p class="quiz-note">
+                Your selected answers are kept while you move between questions.
+                Submit when you are ready to finish.
+            </p>
+        </section>
+
+        <footer class="quiz-footer">
+            <span>© 2026 Navgurukul Campus Quiz Arena</span>
+            <span>Learn Something New Every Day ✦</span>
+        </footer>
+    </main>
+
+    <!-- Quiz behaviour and styling are kept in separate files. -->
+    <script src="Quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Navgurukul | Campus Quiz Arena</title>
+
+    <link rel="stylesheet" href="Style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <script src="Main.js"></script>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span>✦</span>
+            <h2>Navgurukul</h2>
+        </div>
+
+        <nav>
+            <a href="#" class="nav-item active">▦ <span>Dashboard</span></a>
+            <a href="#courses" class="nav-item">▤ <span>My Courses</span></a>
+            <a href="#activity" class="nav-item">◷ <span>Quiz History</span></a>
+            <a href="#progress" class="nav-item">▥ <span>My Progress</span></a>
+            <a href="#" class="nav-item">⚙ <span>Settings</span></a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="help-card">
+                <span>✦</span>
+                <h4>Keep Learning!</h4>
+                <p>Small steps every day lead to big achievements.</p>
+            </div>
+
+            <a href="#" class="nav-item">↪ <span>Logout</span></a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+                <p class="welcome-label">WELCOME BACK</p>
+                <h2>Hello, Aarav 👋</h2>
+            </div>
+
+            <div class="top-actions">
+
+                <button class="notification">♧</button>
+
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+
+                    <div>
+                        <h4>Aarav Sharma</h4>
+                        <p>Student</p>
+                    </div>
+
+                    <span>⌄</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <p class="hero-tag">YOUR LEARNING JOURNEY</p>
+
+                <h1>Learn. Practice.<br>
+                    <span>Achieve More.</span>
+                </h1>
+
+                <p>
+                    Welcome to Campus Quiz Arena. Challenge yourself,
+                    improve your skills and track your learning progress.
+                </p>
+
+                <a href="#courses" class="primary-btn">
+                    Explore Courses →
+                </a>
+
+            </div>
+
+            <div class="hero-decoration">
+                <div class="glow-circle"></div>
+                <span>✦</span>
+            </div>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon orange">◈</div>
+                <p>Total Quizzes</p>
+                <h2>24</h2>
+                <small>Quizzes attempted</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon yellow">✧</div>
+                <p>Average Score</p>
+                <h2>85%</h2>
+                <small class="positive">↑ Keep it up!</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">◷</div>
+                <p>Learning Streak</p>
+                <h2>7 Days</h2>
+                <small>You're doing great!</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">★</div>
+                <p>Achievements</p>
+                <h2>12</h2>
+                <small>Badges unlocked</small>
+            </div>
+
+        </section>
+
+
+        <!-- COURSES -->
+        <section class="section" id="courses">
+
+            <div class="section-heading">
+                <div>
+                    <p class="section-label">EXPLORE YOUR LEARNING</p>
+                    <h2>Choose Your School</h2>
+                </div>
+
+                <a href="#courses">View all →</a>
+            </div>
+
+
+            <div class="course-grid">
+
+                <!-- SOP -->
+                <article class="course-card sop">
+
+                    <div class="course-top">
+                        <div class="course-icon">⌘</div>
+                        <span class="course-number">01</span>
+                    </div>
+
+                    <p class="course-label">SCHOOL OF</p>
+
+                    <h2>Programming</h2>
+
+                    <p class="course-description">
+                        Build your coding knowledge through
+                        interactive quizzes and challenges.
+                    </p>
+
+                    <div class="course-topics">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+
+                    <button onclick="selectCourse('SOP')">
+                        Explore SOP <span>→</span>
+                    </button>
+
+                </article>
+
+
+                <!-- SOB -->
+                <article class="course-card sob">
+
+                    <div class="course-top">
+                        <div class="course-icon">▥</div>
+                        <span class="course-number">02</span>
+                    </div>
+
+                    <p class="course-label">SCHOOL OF</p>
+
+                    <h2>Business</h2>
+
+                    <p class="course-description">
+                        Improve your business knowledge and
+                        master essential workplace tools.
+                    </p>
+
+                    <div class="course-topics">
+                        <span>Google Sheets</span>
+                        <span>Salesforce</span>
+                        <span>CRM</span>
+                    </div>
+
+                    <button onclick="selectCourse('SOB')">
+                        Explore SOB <span>→</span>
+                    </button>
+
+                </article>
+
+
+                <!-- SOF -->
+                <article class="course-card sof">
+
+                    <div class="course-top">
+                        <div class="course-icon">₹</div>
+                        <span class="course-number">03</span>
+                    </div>
+
+                    <p class="course-label">SCHOOL OF</p>
+
+                    <h2>Finance</h2>
+
+                    <p class="course-description">
+                        Strengthen your accounting and financial
+                        knowledge with practice quizzes.
+                    </p>
+
+                    <div class="course-topics">
+                        <span>Class 11</span>
+                        <span>Class 12</span>
+                        <span>Accounting</span>
+                    </div>
+
+                    <button onclick="selectCourse('SOF')">
+                        Explore SOF <span>→</span>
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- BOTTOM SECTION -->
+        <section class="bottom-grid" id="progress">
+
+            <div class="panel progress-panel">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="section-label">YOUR PERFORMANCE</p>
+                        <h2>Learning Progress</h2>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-info">
+                        <span>SOP</span>
+                        <span>75%</span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-fill sop-fill"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-info">
+                        <span>SOB</span>
+                        <span>60%</span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-fill sob-fill"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item">
+                    <div class="progress-info">
+                        <span>SOF</span>
+                        <span>85%</span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-fill sof-fill"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="panel activity-panel" id="activity">
+
+                <p class="section-label">RECENT ACTIVITY</p>
+                <h2>Recent Quizzes</h2>
+
+                <div class="activity-item">
+                    <div class="activity-icon">⌘</div>
+
+                    <div>
+                        <h4>HTML Fundamentals</h4>
+                        <p>SOP · Today</p>
+                    </div>
+
+                    <strong>90%</strong>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">▥</div>
+
+                    <div>
+                        <h4>Google Sheets</h4>
+                        <p>SOB · Yesterday</p>
+                    </div>
+
+                    <strong>85%</strong>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">₹</div>
+
+                    <div>
+                        <h4>Accounting Basics</h4>
+                        <p>SOF · 2 days ago</p>
+                    </div>
+
+                    <strong>80%</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer>
+            <p>© 2026 Navgurukul Campus Quiz Arena</p>
+            <p>Learn Something New Every Day ✦</p>
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="Main.js"></script>
+
+</body>
+</html>

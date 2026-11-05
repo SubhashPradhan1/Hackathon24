@@ -1,0 +1,24 @@
+{
+  "name": "quiz-arena",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Quiz.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/USERNAME/REPOSITORY.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/USERNAME/REPOSITORY/issues"
+  },
+  "homepage": "https://github.com/USERNAME/REPOSITORY#readme",
+  "dependencies": {
+    "@google/genai": "^2.32.0"
+  }
+}
