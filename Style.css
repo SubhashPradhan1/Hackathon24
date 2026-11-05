@@ -843,4 +843,61 @@ footer {
         transition: none !important;
         scroll-behavior: auto !important;
     }
+    /* =====================================
+   AUTOMATIC COURSE-BASED POPUP COLORS
+===================================== */
+
+/* SOP - Programming: Blue */
+.quiz-modal-backdrop[data-school="SOP"] {
+    --course-color: #1A78C4;
+    --course-hover: #1565AD;
+    --course-soft: #EAF5FF;
+    --course-border: #B9DDF8;
+    --course-text: #FFFFFF;
+}
+
+/* SOB - Business: Green */
+.quiz-modal-backdrop[data-school="SOB"] {
+    --course-color: #178050;
+    --course-hover: #11683F;
+    --course-soft: #E8F7F0;
+    --course-border: #B9E8D2;
+    --course-text: #FFFFFF;
+}
+
+/* SOF - Finance: Yellow */
+.quiz-modal-backdrop[data-school="SOF"] {
+    --course-color: #F6C026;
+    --course-hover: #E0A719;
+    --course-soft: #FFF7DC;
+    --course-border: #F5DEA0;
+    --course-text: #14232E;
+}
+
+/* Subject selection hover */
+.quiz-modal-backdrop .quiz-subject-button:hover,
+.quiz-modal-backdrop .quiz-subject-button:focus-visible {
+    border-color: var(--course-color);
+    background: var(--course-soft);
+    outline: none;
+}
+
+/* Continue to Quiz button */
+.quiz-modal-backdrop .quiz-primary-button {
+    background: var(--course-color);
+    color: var(--course-text);
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.quiz-modal-backdrop .quiz-primary-button:hover {
+    background: var(--course-hover);
+    transform: translateY(-2px);
+}
+
+/* Consistent focus */
+.quiz-modal-backdrop .quiz-primary-button:focus-visible {
+    outline: 3px solid var(--course-border);
+    outline-offset: 3px;
+}
 }
