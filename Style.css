@@ -323,10 +323,19 @@ button {
     overflow: hidden;
     border: 1px solid var(--border);
     border-radius: 28px;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.82), rgba(200, 232, 255, 0.62) 58%, rgba(150, 215, 255, 0.42));
+    background:
+    linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.90),
+        rgba(200, 232, 255, 0.25)
+    ),
+    url("assets/images/campus-banner.jpg");
+
+background-size: cover;
+background-position: center 65%;
+background-repeat: no-repeat;
     box-shadow: 0 12px 40px rgba(43, 143, 217, 0.16), var(--glass-edge);
     backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
 }
 
 .hero-content {
@@ -385,12 +394,16 @@ button {
     box-shadow: 0 14px 30px rgba(26, 120, 196, 0.4);
 }
 
-.hero-decoration {
+/*.hero-decoration {
     position: relative;
     flex: 0 0 220px;
     height: 220px;
     display: grid;
     place-items: center;
+}*/
+
+.hero-decoration {
+    display: none;
 }
 
 .glow-circle {
@@ -503,6 +516,22 @@ button {
     text-decoration: underline;
 }
 
+.user-profile {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.user-profile:hover {
+    opacity: 0.8;
+}
+
+.user-profile .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 /* =========================================================
    COURSE (SCHOOL) CARDS
    SOP = blue, SOB = green, SOF = yellow
@@ -843,61 +872,8 @@ footer {
         transition: none !important;
         scroll-behavior: auto !important;
     }
-    /* =====================================
-   AUTOMATIC COURSE-BASED POPUP COLORS
-===================================== */
-
-/* SOP - Programming: Blue */
-.quiz-modal-backdrop[data-school="SOP"] {
-    --course-color: #1A78C4;
-    --course-hover: #1565AD;
-    --course-soft: #EAF5FF;
-    --course-border: #B9DDF8;
-    --course-text: #FFFFFF;
 }
 
-/* SOB - Business: Green */
-.quiz-modal-backdrop[data-school="SOB"] {
-    --course-color: #178050;
-    --course-hover: #11683F;
-    --course-soft: #E8F7F0;
-    --course-border: #B9E8D2;
-    --course-text: #FFFFFF;
-}
-
-/* SOF - Finance: Yellow */
-.quiz-modal-backdrop[data-school="SOF"] {
-    --course-color: #F6C026;
-    --course-hover: #E0A719;
-    --course-soft: #FFF7DC;
-    --course-border: #F5DEA0;
-    --course-text: #14232E;
-}
-
-/* Subject selection hover */
-.quiz-modal-backdrop .quiz-subject-button:hover,
-.quiz-modal-backdrop .quiz-subject-button:focus-visible {
-    border-color: var(--course-color);
-    background: var(--course-soft);
-    outline: none;
-}
-
-/* Continue to Quiz button */
-.quiz-modal-backdrop .quiz-primary-button {
-    background: var(--course-color);
-    color: var(--course-text);
-    border: none;
-    transition: all 0.25s ease;
-}
-
-.quiz-modal-backdrop .quiz-primary-button:hover {
-    background: var(--course-hover);
-    transform: translateY(-2px);
-}
-
-/* Consistent focus */
-.quiz-modal-backdrop .quiz-primary-button:focus-visible {
-    outline: 3px solid var(--course-border);
-    outline-offset: 3px;
-}
+/* =================================
+   LOGIN MODAL
 }
