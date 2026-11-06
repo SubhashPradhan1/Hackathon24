@@ -1,25 +1,17 @@
-/* Navgurukul Campus Quiz Arena
-   Frontend interactions for the supplied index.html.
-   No API key or backend logic belongs in this file.
-*/
-
 (() => {
     "use strict";
 
     const schools = {
         SOP: {
             name: "School of Programming",
-            description: "Choose a programming topic to practise.",
             subjects: ["HTML", "CSS", "JavaScript"]
         },
         SOB: {
             name: "School of Business",
-            description: "Choose a business tool or concept to practise.",
             subjects: ["Google Sheets", "Salesforce", "CRM"]
         },
         SOF: {
             name: "School of Finance",
-            description: "Choose an accountancy topic to practise.",
             subjects: [
                 "Class 11 NCERT Accountancy",
                 "Class 12 NCERT Accountancy",
@@ -28,292 +20,298 @@
         }
     };
 
-    let selectedSchool = "";
-    let selectedSubject = "";
+    let lastFocusedElement = null;
 
-    // Create a small message area for feedback.
-    const toast = document.createElement("div");
-    toast.className = "quiz-toast";
-    toast.setAttribute("role", "status");
-    toast.setAttribute("aria-live", "polite");
-    document.body.appendChild(toast);
+    const styles = document.createElement("style");
+    styles.textContent = `
+        .quiz-modal-backdrop {
+            --course-accent: #2183cf;
+            --course-soft: #eaf5ff;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: grid;
+            place-items: center;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgb(16 30 48 / 58%);
+            backdrop-filter: blur(7px);
+            animation: quizFadeIn 180ms ease-out;
+        }
 
-    let toastTimer;
-    function showToast(message) {
-        toast.textContent = message;
-        toast.classList.add("show");
-        window.clearTimeout(toastTimer);
-        toastTimer = window.setTimeout(() => {
-            toast.classList.remove("show");
-        }, 2800);
-    }
+        .quiz-modal-backdrop.quiz-modal-sob {
+            --course-accent: #168653;
+            --course-soft: #e9f8f0;
+        }
 
-    // Add the modal and interaction styles without changing Style.css.
-    const interactionStyles = document.createElement("style");
-    interactionStyles.textContent = `
-        .quiz-modal-backdrop[data-school="SOP"] {
-    --course-color: #1a78c4;
-    --course-hover: #1565ad;
-    --course-soft: #eaf5ff;
-    --course-text: #ffffff;
-}
+        .quiz-modal-backdrop.quiz-modal-sof {
+            --course-accent: #dfa900;
+            --course-soft: #fff7db;
+        }
 
-.quiz-modal-backdrop[data-school="SOB"] {
-    --course-color: #178050;
-    --course-hover: #11683f;
-    --course-soft: #e8f7f0;
-    --course-text: #ffffff;
-}
+        .quiz-modal {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            width: min(100%, 520px);
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 38px;
+            border: 1px solid rgb(255 255 255 / 75%);
+            border-radius: 26px;
+            background:
+                radial-gradient(ellipse at top right, var(--course-soft), transparent 55%),
+                #fff;
+            color: #172635;
+            box-shadow: 0 28px 80px rgb(15 35 55 / 28%);
+            font: 500 16px/1.5 Inter, sans-serif;
+            animation: quizModalIn 220ms ease-out;
+        }
 
-.quiz-modal-backdrop[data-school="SOF"] {
-    --course-color: #f6c026;
-    --course-hover: #e0a719;
-    --course-soft: #fff7dc;
-    --course-text: #14232e;
-}
+        .quiz-modal::before {
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 7px;
+            background: var(--course-accent);
+            content: "";
+        }
 
-.quiz-subject-button:hover,
-.quiz-subject-button:focus-visible {
-    border-color: var(--course-color);
-    background: var(--course-soft);
-    outline: none;
-    .quiz-primary-button {
-    width: 100%;
-    border: 0;
-    border-radius: 10px;
-    padding: 13px 18px;
+        .quiz-modal h2 {
+            margin: 0 52px 8px 0;
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+        }
 
-    background: var(--course-color, #1a78c4);
-    color: var(--course-text, #ffffff);
+        .quiz-modal p {
+            margin: 0 0 26px;
+            color: #64778a;
+        }
 
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
+        .quiz-modal label {
+            display: grid;
+            gap: 8px;
+            margin: 17px 0;
+            color: #253747;
+            font-size: 14px;
+            font-weight: 700;
+        }
 
-    transition: all 0.25s ease;
-}
+        .quiz-modal select {
+            width: 100%;
+            min-height: 54px;
+            padding: 0 15px;
+            border: 1px solid #d5e0e9;
+            border-radius: 12px;
+            outline: none;
+            background: #fff;
+            color: #172635;
+            font: 600 16px Inter, sans-serif;
+        }
 
-.quiz-primary-button:hover {
-    background: var(--course-hover, #1565ad);
-    transform: translateY(-2px);
-}
+        .quiz-modal select:focus-visible {
+            border-color: var(--course-accent);
+            box-shadow: 0 0 0 4px rgb(33 131 207 / 16%);
+        }
 
-.quiz-primary-button:focus-visible {
-    outline: 3px solid var(--course-soft);
-    outline-offset: 3px;
-}
-}
+        .quiz-modal button {
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            font: inherit;
+            transition: transform 150ms ease, filter 150ms ease;
+        }
+
+        .quiz-modal button:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+        }
+
+        .quiz-modal .quiz-close {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            width: 44px;
+            height: 44px;
+            background: var(--course-soft);
+            color: #263746;
+            font-size: 20px;
+        }
+
+        .quiz-modal .quiz-start {
+            width: 100%;
+            min-height: 58px;
+            margin-top: 12px;
+            background: var(--course-accent);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+            box-shadow: 0 8px 18px rgb(15 35 55 / 14%);
+        }
+
+        @keyframes quizFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes quizModalIn {
+            from { opacity: 0; transform: translateY(12px) scale(.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 560px) {
+            .quiz-modal {
+                padding: 30px 22px 24px;
+                border-radius: 20px;
+            }
+
+            .quiz-modal .quiz-close {
+                top: 16px;
+                right: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .quiz-modal-backdrop,
+            .quiz-modal {
+                animation: none;
+            }
+        }
     `;
-    document.head.appendChild(interactionStyles);
+    document.head.appendChild(styles);
 
     function closeModal() {
         const backdrop = document.querySelector(".quiz-modal-backdrop");
-        if (backdrop) backdrop.remove();
-        document.body.classList.remove("quiz-modal-open");
+        if (!backdrop) return;
+
+        backdrop.remove();
+
+        if (lastFocusedElement?.isConnected) {
+            lastFocusedElement.focus();
+        }
     }
 
-    function openModal(title, description, content) {
+    function showModal(schoolCode) {
+        const code = String(schoolCode || "").toUpperCase();
+        const school = schools[code];
+
+        if (!school) {
+            console.error(`Unknown school code: ${schoolCode}`);
+            return;
+        }
+
+        lastFocusedElement = document.activeElement;
         closeModal();
 
         const backdrop = document.createElement("div");
-        backdrop.className = "quiz-modal-backdrop";
-        backdrop.dataset.school = selectedSchool;
+        backdrop.className = `quiz-modal-backdrop quiz-modal-${code.toLowerCase()}`;
+
         backdrop.innerHTML = `
-            <section class="quiz-modal" role="dialog" aria-modal="true"
+            <section class="quiz-modal"
+                     role="dialog"
+                     aria-modal="true"
                      aria-labelledby="quiz-modal-title">
-                <div class="quiz-modal-header">
-                    <div>
-                        <h2 id="quiz-modal-title"></h2>
-                        <p class="quiz-modal-description"></p>
-                    </div>
-                    <button class="quiz-modal-close" type="button"
-                            aria-label="Close dialog">&times;</button>
-                </div>
-                <div class="quiz-modal-content"></div>
+                <button class="quiz-close" type="button" aria-label="Close">✕</button>
+                <h2 id="quiz-modal-title"></h2>
+                <p>Choose a subject, difficulty, and number of questions.</p>
+
+                <form>
+                    <label>
+                        Subject
+                        <select name="subject" required></select>
+                    </label>
+
+                    <label>
+                        Difficulty
+                        <select name="difficulty">
+                            <option>Easy</option>
+                            <option selected>Medium</option>
+                            <option>Hard</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Number of questions
+                        <select name="questionCount">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </label>
+
+                    <button class="quiz-start" type="submit">Start quiz</button>
+                </form>
             </section>
         `;
 
-        backdrop.querySelector("#quiz-modal-title").textContent = title;
-        backdrop.querySelector(".quiz-modal-description").textContent = description;
-        backdrop.querySelector(".quiz-modal-content").appendChild(content);
+        backdrop.querySelector("#quiz-modal-title").textContent = school.name;
+
+        const subjectSelect = backdrop.querySelector('[name="subject"]');
+
+        school.subjects.forEach((subject) => {
+            const option = document.createElement("option");
+            option.value = subject;
+            option.textContent = subject;
+            subjectSelect.appendChild(option);
+        });
+
+        backdrop.querySelector(".quiz-close").addEventListener("click", closeModal);
 
         backdrop.addEventListener("click", (event) => {
             if (event.target === backdrop) closeModal();
         });
-        backdrop.querySelector(".quiz-modal-close").addEventListener("click", closeModal);
 
-        document.body.appendChild(backdrop);
-        document.body.classList.add("quiz-modal-open");
-        backdrop.querySelector(".quiz-modal-close").focus();
-    }
-
-    function showSubjects(schoolCode) {
-        const school = schools[schoolCode];
-        if (!school) {
-            showToast("School not found. Please try again.");
-            return;
-        }
-
-        selectedSchool = schoolCode;
-        selectedSubject = "";
-
-        const list = document.createElement("div");
-        list.className = "quiz-subject-list";
-
-        school.subjects.forEach((subject) => {
-            const button = document.createElement("button");
-            button.type = "button";
-            button.className = "quiz-subject-button";
-
-            const name = document.createElement("span");
-            name.textContent = subject;
-            const arrow = document.createElement("span");
-            arrow.textContent = "→";
-            button.append(name, arrow);
-
-            button.addEventListener("click", () => {
-                selectedSubject = subject;
-                showQuizSetup();
-            });
-            list.appendChild(button);
-        });
-
-        openModal(school.name, school.description, list);
-    }
-
-    function showQuizSetup() {
-        const form = document.createElement("form");
-        form.className = "quiz-form";
-        form.innerHTML = `
-            <label>
-                Difficulty
-                <select name="difficulty" required>
-                    <option value="Easy">Easy</option>
-                    <option value="Medium" selected>Medium</option>
-                    <option value="Hard">Hard</option>
-                </select>
-            </label>
-            <label>
-                Number of questions
-                <select name="questionCount" required>
-                    <option value="5">5 questions</option>
-                    <option value="10" selected>10 questions</option>
-                    <option value="15">15 questions</option>
-                    <option value="20">20 questions</option>
-                </select>
-            </label>
-            <button class="quiz-primary-button" type="submit">
-                Continue to Quiz
-            </button>
-        `;
-
-        form.addEventListener("submit", (event) => {
+        backdrop.querySelector("form").addEventListener("submit", (event) => {
             event.preventDefault();
-            const formData = new FormData(form);
+
+            const form = event.currentTarget;
             const settings = {
-                school: selectedSchool,
-                subject: selectedSubject,
-                difficulty: formData.get("difficulty"),
-                questionCount: Number(formData.get("questionCount"))
+                school: code,
+                subject: form.elements.subject.value,
+                difficulty: form.elements.difficulty.value,
+                questionCount: Number(form.elements.questionCount.value)
             };
 
-            // Save the chosen settings for the next frontend/backend step.
             try {
-                sessionStorage.setItem("navgurukulQuizSetup", JSON.stringify(settings));
+                sessionStorage.setItem(
+                    "navgurukulQuizSetup",
+                    JSON.stringify(settings)
+                );
             } catch (error) {
-                console.warn("Could not save quiz settings in sessionStorage.", error);
+                console.error("Could not save quiz settings:", error);
+                window.alert("Could not save your quiz settings. Please try again.");
+                return;
             }
 
-            closeModal();
-            showToast(
-                `${settings.subject}: ${settings.questionCount} ${settings.difficulty.toLowerCase()} questions selected.`
-            );
-
-            // Gemini/API quiz generation will be connected in a later step.
-            document.dispatchEvent(new CustomEvent("quizSetupComplete", {
-                detail: settings
-            }));
-            console.log("Quiz setup selected:", settings); 
-            window.location.href = "Quiz.html";
+            window.location.href = new URL("Quiz.html", window.location.href).href;
         });
 
-        openModal(
-            selectedSubject,
-            `Set up your ${schools[selectedSchool].name} practice quiz.`,
-            form
-        );
+        document.body.appendChild(backdrop);
+        backdrop.querySelector(".quiz-close").focus();
     }
 
-    // This function is called by the existing inline onclick attributes.
-    window.selectCourse = showSubjects;
+    // Supports buttons using onclick="selectCourse('SOP')".
+    window.selectCourse = showModal;
 
-    // Make in-page navigation links work and update the active sidebar item.
-    const navLinks = document.querySelectorAll(".sidebar nav .nav-item");
-    navLinks.forEach((link) => {
-        const href = link.getAttribute("href");
-        if (href && href.startsWith("#") && href.length > 1) {
-            link.addEventListener("click", () => {
-                navLinks.forEach((item) => item.classList.remove("active"));
-                link.classList.add("active");
-            });
+    // Also supports buttons using data-school="SOP".
+    document.addEventListener("click", (event) => {
+        const target = event.target;
+        const button = target instanceof Element
+            ? target.closest("[data-school]")
+            : null;
+
+        // Avoid opening the modal twice if a button uses both methods.
+        if (button && !button.hasAttribute("onclick")) {
+            showModal(button.dataset.school);
         }
     });
 
-    // Smooth-scroll for the hero's Explore Courses link and other page anchors.
-    document.querySelectorAll('a[href^="#"]').forEach((link) => {
-        link.addEventListener("click", (event) => {
-            const targetId = link.getAttribute("href");
-            if (!targetId || targetId === "#") return;
-
-            const target = document.querySelector(targetId);
-            if (target) {
-                event.preventDefault();
-                target.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-        });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeModal();
     });
-
-    // Keep the active sidebar item in sync while scrolling through sections.
-    const sections = ["courses", "activity", "progress"]
-        .map((id) => document.getElementById(id))
-        .filter(Boolean);
-
-    if ("IntersectionObserver" in window && sections.length) {
-        const observer = new IntersectionObserver((entries) => {
-            const visible = entries
-                .filter((entry) => entry.isIntersecting)
-                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-            if (!visible) return;
-            navLinks.forEach((link) => {
-                link.classList.toggle(
-                    "active",
-                    link.getAttribute("href") === `#${visible.target.id}`
-                );
-            });
-        }, { rootMargin: "-20% 0px -65% 0px", threshold: [0, 0.2, 0.5] });
-
-        sections.forEach((section) => observer.observe(section));
-    }
-
-    // Dashboard notification button.
-    const notificationButton = document.querySelector(".notification");
-    if (notificationButton) {
-        notificationButton.addEventListener("click", () => {
-            showToast("You're all caught up. New quiz notifications will appear here.");
-        });
-    }
-
-    // Logout is currently a frontend placeholder; authentication is not connected.
-    const logoutLink = Array.from(document.querySelectorAll(".sidebar a"))
-        .find((link) => link.textContent.toLowerCase().includes("logout"));
-
-    if (logoutLink) {
-        logoutLink.addEventListener("click", (event) => {
-            event.preventDefault();
-            showToast("Logout will be available after student login is connected.");
-        });
-    }
-
-    console.log("Navgurukul Campus Quiz Arena JavaScript loaded.");
 })();
